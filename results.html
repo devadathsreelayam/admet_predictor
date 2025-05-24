@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADMET Prediction Results</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .card-header {
+      font-weight: bold;
+    }
+    .property-card {
+      border-left: 5px solid #0d6efd;
+      transition: transform 0.3s;
+    }
+    .property-card:hover {
+      transform: translateY(-5px);
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">ADMET Predictor</a>
+    </div>
+  </nav>
+
+  <div class="container py-5">
+    <h2 class="mb-4 text-center">Prediction Results</h2>
+
+    <div class="row g-4">
+      <!-- Absorption -->
+      <div class="col-md-6">
+        <div class="card property-card">
+          <div class="card-header bg-info text-white">📦 Absorption</div>
+          <div class="card-body">
+            <p><strong>Water Solubility:</strong> Moderate</p>
+            <p><strong>Intestinal Absorption:</strong> High</p>
+            <p><strong>Skin Permeability:</strong> Low</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Distribution -->
+      <div class="col-md-6">
+        <div class="card property-card">
+          <div class="card-header bg-success text-white">🔄 Distribution</div>
+          <div class="card-body">
+            <p><strong>Volume of Distribution (VDss):</strong> High</p>
+            <p><strong>Blood Brain Barrier (BBB) Permeability:</strong> Moderate</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Metabolism -->
+      <div class="col-md-6">
+        <div class="card property-card">
+          <div class="card-header bg-warning text-dark">⚙️ Metabolism</div>
+          <div class="card-body">
+            <p><strong>CYP450 Substrate:</strong> Yes (CYP3A4)</p>
+            <p><strong>CYP450 Inhibitor:</strong> No</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Excretion -->
+      <div class="col-md-6">
+        <div class="card property-card">
+          <div class="card-header bg-secondary text-white">🚽 Excretion</div>
+          <div class="card-body">
+            <p><strong>Renal Clearance:</strong> Moderate</p>
+            <p><strong>Half-Life:</strong> 6 hours</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Toxicity -->
+      <div class="col-md-6">
+        <div class="card property-card">
+          <div class="card-header bg-danger text-white">☠️ Toxicity</div>
+          <div class="card-body">
+            <p><strong>AMES Toxicity:</strong> Negative</p>
+            <p><strong>hERG Inhibition:</strong> Low Risk</p>
+            <p><strong>LD50 (Rat):</strong> 500 mg/kg</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center mt-5">
+      <a href="index.html" class="btn btn-outline-primary">← Predict Another</a>
+    </div>
+  </div>
+
+  <footer class="bg-dark text-white text-center py-3 mt-5">
+    <div class="container">
+      <small>&copy; 2025 ADMET Predictor. All rights reserved.</small>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

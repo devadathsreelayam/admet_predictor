@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ADMET Predictor</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <nav
+      class="navbar navbar-expand-lg fixed-top navbar-dark navbar-custom"
+      id="mainNavbar"
+    >
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#"
+          ><span class="focus">ADMET</span> Predictor</a
+        >
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarLinks"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarLinks">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="#theory">Foundations</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Our Models</a>
+            </li>
+            <li class="nav-item"><a class="nav-link" href="#">API</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">About Us</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="hero">
+      <div class="hero-content container">
+        <h1 class="display-4 fw">ADMET Prediction in<br />Drug Discovery</h1>
+        <p class="lead mt-2 fs-6">
+          An AI based comprehensive tool for predicting
+          <span class="fw-bold"></span
+          ><span class="focus fs-5">A</span>bsorption,
+          <span class="focus fs-5">D</span>istribution,
+          <span class="focus fs-5">M</span>etabolism,
+          <span class="focus fs-5">E</span>xtretion and
+          <span class="focus fs-5">T</span>oxicity of new drug candidates
+        </p>
+
+        <form class="row g-2 justify-content-center mt-4">
+          <div class="input-group mb-3" style="max-width: 600px; width: 100%">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Enter SMILES string"
+              aria-label="SMILES"
+            />
+            <button
+              class="btn btn-predict"
+              type="button"
+              data-bs-toggle="modal"
+              data-bs-target="#predictModal"
+            >
+              Predict
+            </button>
+          </div>
+        </form>
+
+        <div class="upload-section">
+          <button
+            class="btn btn-secondary mt-3"
+            data-bs-toggle="modal"
+            data-bs-target="#batchPredictModal"
+          >
+            Upload Batch File
+          </button>
+          <p class="text-light mt-2">
+            Accepted file format: .csv with a column named 'SMILES'
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Predict Modal -->
+    <div
+      class="modal fade"
+      id="predictModal"
+      tabindex="-1"
+      aria-labelledby="predictModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Select ADMET Properties to Predict</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <div class="modal-body text-center">
+            <form id="propertyForm" action="/results.html">
+              <div
+                class="btn-group mb-3 flex-wrap"
+                role="group"
+                aria-label="ADMET properties"
+              >
+                <input
+                  type="checkbox"
+                  class="btn-check"
+                  id="absorption"
+                  name="properties"
+                  value="absorption"
+                  autocomplete="off"
+                />
+                <label class="btn btn-outline-primary m-1" for="absorption"
+                  >Absorption</label
+                >
+
+                <input
+                  type="checkbox"
+                  class="btn-check"
+                  id="distribution"
+                  name="properties"
+                  value="distribution"
+                  autocomplete="off"
+                />
+                <label class="btn btn-outline-primary m-1" for="distribution"
+                  >Distribution</label
+                >
+
+                <input
+                  type="checkbox"
+                  class="btn-check"
+                  id="metabolism"
+                  name="properties"
+                  value="metabolism"
+                  autocomplete="off"
+                />
+                <label class="btn btn-outline-primary m-1" for="metabolism"
+                  >Metabolism</label
+                >
+
+                <input
+                  type="checkbox"
+                  class="btn-check"
+                  id="excretion"
+                  name="properties"
+                  value="excretion"
+                  autocomplete="off"
+                />
+                <label class="btn btn-outline-primary m-1" for="excretion"
+                  >Excretion</label
+                >
+
+                <input
+                  type="checkbox"
+                  class="btn-check"
+                  id="toxicity"
+                  name="properties"
+                  value="toxicity"
+                  autocomplete="off"
+                />
+                <label class="btn btn-outline-primary m-1" for="toxicity"
+                  >Toxicity</label
+                >
+              </div>
+
+              <div>
+                <button type="submit" class="btn btn-primary">
+                  Predict Selected
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Batch Predict Modal -->
+    <div
+      class="modal fade"
+      id="batchPredictModal"
+      tabindex="-1"
+      aria-labelledby="batchPredictModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <form id="batchForm">
+            <div class="modal-header">
+              <h5 class="modal-title">Batch Prediction</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+              ></button>
+            </div>
+
+            <div class="modal-body">
+              <!-- File Upload -->
+              <div class="mb-3 text-center">
+                <label for="csvFile" class="form-label"
+                  >Select a CSV file</label
+                >
+                <input class="form-control" type="file" id="csvFile"
+                accept=\".csv\" required>
+                <div
+                  id="fileName"
+                  class="form-text mt-2 text-primary fw-semibold"
+                ></div>
+              </div>
+
+              <!-- ADMET Property Selection -->
+              <div class="text-center">
+                <p>Select ADMET properties to predict:</p>
+                <div
+                  class="btn-group flex-wrap"
+                  role="group"
+                  aria-label="ADMET Properties"
+                >
+                  <input
+                    type="checkbox"
+                    class="btn-check"
+                    id="absorptionB"
+                    name="properties"
+                    value="absorption"
+                  />
+                  <label class="btn btn-outline-primary m-1" for="absorptionB"
+                    >Absorption</label
+                  >
+
+                  <input
+                    type="checkbox"
+                    class="btn-check"
+                    id="distributionB"
+                    name="properties"
+                    value="distribution"
+                  />
+                  <label class="btn btn-outline-primary m-1" for="distributionB"
+                    >Distribution</label
+                  >
+
+                  <input
+                    type="checkbox"
+                    class="btn-check"
+                    id="metabolismB"
+                    name="properties"
+                    value="metabolism"
+                  />
+                  <label class="btn btn-outline-primary m-1" for="metabolismB"
+                    >Metabolism</label
+                  >
+
+                  <input
+                    type="checkbox"
+                    class="btn-check"
+                    id="excretionB"
+                    name="properties"
+                    value="excretion"
+                  />
+                  <label class="btn btn-outline-primary m-1" for="excretionB"
+                    >Excretion</label
+                  >
+
+                  <input
+                    type="checkbox"
+                    class="btn-check"
+                    id="toxicityB"
+                    name="properties"
+                    value="toxicity"
+                  />
+                  <label class="btn btn-outline-primary m-1" for="toxicityB"
+                    >Toxicity</label
+                  >
+                </div>
+              </div>
+            </div>
+
+            <div class="modal-footer justify-right">
+              <button type="submit" class="btn btn-primary">Predict</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <section class="py-5 bg-light" id="theory">
+      <div class="container">
+        <div class="text-center mb-5">
+          <h2 class="display-5 mb-3">
+            Understanding the Foundation of Modern Drug Development
+          </h2>
+          <p class="text-muted fs-5">
+            Drug Discovery and ADMET analysis are central pillars in
+            accelerating safe and effective therapeutic design.
+          </p>
+        </div>
+
+        <div class="row g-4 justify-content-center">
+          <!-- Drug Discovery Card -->
+          <div class="col-md-6">
+            <div class="card shadow-sm h-100 border-0">
+              <div class="card-body p-4">
+                <h3 class="card-title text-primary mb-3">🧬 Drug Discovery</h3>
+                <p class="text-muted">
+                  Drug discovery is a multidisciplinary process aimed at
+                  identifying and developing new therapeutic compounds. It
+                  involves complex stages including target identification,
+                  compound screening, optimization, and preclinical validation.
+                </p>
+                <ul class="text-muted">
+                  <li>
+                    <strong>Early Drug Discovery:</strong> Screening and
+                    biological targeting.
+                  </li>
+                  <li>
+                    <strong>Clinical Trials:</strong> Human testing for safety,
+                    efficacy, and dosage.
+                  </li>
+                </ul>
+                <p class="text-muted">
+                  The process typically spans <strong>15+ years</strong> and
+                  costs over <strong>$2.5 billion</strong>, emphasizing the need
+                  for precision and efficiency.
+                </p>
+                <a href="#" class="btn btn-outline-primary mt-2">Know More</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- ADMET Card -->
+          <div class="col-md-6">
+            <div class="card shadow-sm h-100 border-0">
+              <div class="card-body p-4">
+                <h3 class="card-title text-success mb-3">⚗️ ADMET</h3>
+                <p class="text-muted">
+                  ADMET stands for Absorption, Distribution, Metabolism,
+                  Excretion, and Toxicity — key pharmacokinetic and
+                  toxicological factors that influence a drug’s success in
+                  clinical trials.
+                </p>
+                <p class="text-muted">
+                  Poor ADMET properties are a leading cause of late-stage
+                  failure. Evaluating them early prevents wasted resources and
+                  saves lives.
+                </p>
+                <p class="text-muted">
+                  <strong>In-silico methods</strong> enable fast, cost-effective
+                  prediction of ADMET behavior, supporting better candidate
+                  selection and reduced animal testing.
+                </p>
+                <a href="#" class="btn btn-outline-success mt-2">Know More</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="bg-dark text-light py-4 mt-5">
+      <div class="container text-center">
+        <h5 class="mb-3">ADMET Predictor</h5>
+
+        <div class="mb-4 mt-4">
+          <p class="mb-2 mb-3">Powered by:</p>
+          <a
+            href="https://getbootstrap.com/"
+            target="_blank"
+            class="text-light text-decoration-none mx-2"
+            title="Bootstrap"
+          >
+            <img
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg"
+              alt="Bootstrap"
+              height="40"
+            />
+          </a>
+          <a
+            href="https://pytorch.org/"
+            target="_blank"
+            class="text-light text-decoration-none mx-2"
+            title="PyTorch"
+          >
+            <img
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pytorch/pytorch-original.svg"
+              alt="PyTorch"
+              height="40"
+            />
+          </a>
+          <a
+            href="https://www.rdkit.org/"
+            target="_blank"
+            class="text-light text-decoration-none mx-2"
+            title="RDKit"
+          >
+            <img
+              src="https://avatars.githubusercontent.com/u/2018047?s=280&v=4"
+              alt="RDKit"
+              height="40"
+            />
+          </a>
+          <a
+            href="https://pytorch-geometric.readthedocs.io/"
+            target="_blank"
+            class="text-light text-decoration-none mx-2"
+            title="PyTorch Geometric"
+          >
+            <img
+              src="https://raw.githubusercontent.com/pyg-team/pyg_sphinx_theme/master/pyg_sphinx_theme/static/img/pyg_logo_text.svg?sanitize=true"
+              alt="PyTorch Geometric"
+              height="40"
+            />
+          </a>
+          <a
+            href="https://flask.palletsprojects.com/en/stable/"
+            target="_blank"
+            class="text-light text-decoration-none mx-2"
+            title="Flask"
+          >
+            <img
+              src="https://raw.githubusercontent.com/tandpfun/skill-icons/main/icons/Flask-Dark.svg"
+              alt="Flask"
+              height="40"
+            />
+          </a>
+        </div>
+
+        <p class="mb-1">
+          &copy; 2025 Devadath and Nishwa. All rights reserved.
+        </p>
+        <div>
+          <a href="#" class="text-light text-decoration-none me-3"
+            >Privacy Policy</a
+          >
+          <a href="#" class="text-light text-decoration-none"
+            >Terms of Service</a
+          >
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Change navbar background on scroll
+      window.addEventListener("scroll", function () {
+        const navbar = document.getElementById("mainNavbar");
+        if (window.scrollY > 50) {
+          navbar.classList.add("navbar-dark-scroll");
+        } else {
+          navbar.classList.remove("navbar-dark-scroll");
+        }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
